@@ -1,7 +1,8 @@
-
 use phf::phf_map;
 use phf::Map;
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 use wasm_bindgen::prelude::*;
 
 /// # Sample code
@@ -11,12 +12,12 @@ use wasm_bindgen::prelude::*;
 /// assert!(subdivisions.unwrap().len() > 0);
 /// let country = rust_iso3166::iso3166_2::from_code("GB-EDH");
 /// assert_eq!("Edinburgh, City of", country.unwrap().name);
-/// println!("{:?}", rust_iso3166::iso3166_2::SUBDIVISION_COUNTRY_MAP); 
-/// println!("{:?}", rust_iso3166::iso3166_2::SUBDIVISION_MAP); 
+/// println!("{:?}", rust_iso3166::iso3166_2::SUBDIVISION_COUNTRY_MAP);
+/// println!("{:?}", rust_iso3166::iso3166_2::SUBDIVISION_MAP);
 /// ```
 
 /// Data for each Country Code defined by ISO 3166-2
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 #[wasm_bindgen]
 #[derive(Debug, Ord, PartialOrd, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Subdivision {
@@ -34,7 +35,7 @@ pub struct Subdivision {
     region_code: &'static str,
 }
 
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 #[wasm_bindgen]
 impl Subdivision {
     #[wasm_bindgen(getter)]
@@ -68,7 +69,7 @@ impl Subdivision {
     }
 }
 
-#[cfg(any(not(direct_wasm),not(target_arch = "wasm32")))]
+#[cfg(any(not(direct_wasm), not(target_arch = "wasm32")))]
 #[derive(Debug, Ord, PartialOrd, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Subdivision {
     ///Name
@@ -94,6 +95,30 @@ pub struct Subdivision {
 #[cfg_attr(all(direct_wasm,target_arch = "wasm32"), wasm_bindgen(js_name = from_code_iso_3166_2))]
 pub fn from_code(code: &str) -> Option<Subdivision> {
     SUBDIVISION_MAP.get(code).cloned()
+}
+
+#[cfg(feature = "serde")]
+impl Serialize for Subdivision {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(self.code)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> Deserialize<'de> for Subdivision {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        use serde::de::Error;
+        let s = String::deserialize(deserializer)?;
+        let s_upper = s.to_uppercase();
+        from_code(&s_upper)
+            .ok_or_else(|| D::Error::custom(format!("Invalid ISO 3166-2 code: {}", s)))
+    }
 }
 
 pub const AF_BAL: Subdivision = Subdivision {
@@ -46140,8 +46165,7 @@ pub const ZW_MW: Subdivision = Subdivision {
     region_code: "MW",
 };
 
-
-///Subdivision map with  Code key 
+///Subdivision map with  Code key
 pub const SUBDIVISION_MAP: Map<&str, Subdivision> = phf_map! {
 
 "AF-BAL" => AF_BAL,
@@ -51263,8 +51287,7 @@ pub const SUBDIVISION_MAP: Map<&str, Subdivision> = phf_map! {
 
 };
 
-
-///Subdivision map with  Code key 
+///Subdivision map with  Code key
 pub const SUBDIVISION_COUNTRY_MAP: Map<&str, &[Subdivision]> = phf_map! {
 
 "AF" => &[
@@ -56885,4 +56908,3 @@ ZW_MW,
 ],
 
 };
-

@@ -1,14 +1,15 @@
-
+use crate::CountryCode;
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
+use js_sys::Array;
 use phf::phf_map;
 use phf::Map;
-use crate::CountryCode;
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 use wasm_bindgen::prelude::*;
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
-use js_sys::Array;
 
 /// Data for each Country Code defined by ISO 3166-1
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 #[wasm_bindgen]
 #[derive(Debug, Ord, PartialOrd, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct CountryCode3 {
@@ -24,10 +25,9 @@ pub struct CountryCode3 {
     validity: &'static [i32],
     ///Decription
     desc: &'static str,
-   
 }
 
-#[cfg(all(direct_wasm,target_arch = "wasm32"))]
+#[cfg(all(direct_wasm, target_arch = "wasm32"))]
 #[wasm_bindgen]
 impl CountryCode3 {
     #[wasm_bindgen(getter)]
@@ -47,21 +47,21 @@ impl CountryCode3 {
 
     #[wasm_bindgen(getter)]
     pub fn new_countries(&self) -> Array {
-    	let mut vector: Vec<CountryCode> = Vec::new(); 
+        let mut vector: Vec<CountryCode> = Vec::new();
         // self.individual_languages.into_serde().unwrap();
-		for i in 0..self.new_countries.len() {
-			vector.push(self.new_countries[i])
-		}
-		vector.into_iter().map(JsValue::from).collect()
+        for i in 0..self.new_countries.len() {
+            vector.push(self.new_countries[i])
+        }
+        vector.into_iter().map(JsValue::from).collect()
     }
-    
+
     #[wasm_bindgen(getter)]
     pub fn desc(&self) -> String {
         self.desc.into()
     }
 }
 
-#[cfg(any(not(direct_wasm),not(target_arch = "wasm32")))]
+#[cfg(any(not(direct_wasm), not(target_arch = "wasm32")))]
 #[derive(Debug, Ord, PartialOrd, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct CountryCode3 {
     ///ISO 3166-3 code
@@ -76,9 +76,7 @@ pub struct CountryCode3 {
     pub validity: &'static [i32],
     ///Decription
     pub desc: &'static str,
-   
 }
-
 
 pub const BQAQ: CountryCode3 = CountryCode3 {
     code: "BQAQ",
@@ -89,20 +87,15 @@ pub const BQAQ: CountryCode3 = CountryCode3 {
         alpha3: "ATB",
         numeric: 0,
     },
-    validity: &[1974,1979],
+    validity: &[1974, 1979],
     desc: "Merged into Antarctica ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Antarctica",
         alpha2: "AQ",
         alpha3: "ATA",
         numeric: 10,
-},
-
-    ],
+    }],
 };
-
 
 pub const BUMM: CountryCode3 = CountryCode3 {
     code: "BUMM",
@@ -113,20 +106,15 @@ pub const BUMM: CountryCode3 = CountryCode3 {
         alpha3: "BUR",
         numeric: 104,
     },
-    validity: &[1974,1989],
+    validity: &[1974, 1989],
     desc: "Name changed to Myanmar ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Myanmar",
         alpha2: "MM",
         alpha3: "MMR",
         numeric: 104,
-},
-
-    ],
+    }],
 };
-
 
 pub const BYAA: CountryCode3 = CountryCode3 {
     code: "BYAA",
@@ -137,20 +125,15 @@ pub const BYAA: CountryCode3 = CountryCode3 {
         alpha3: "BYS",
         numeric: 112,
     },
-    validity: &[1974,1992],
+    validity: &[1974, 1992],
     desc: "Name changed to Belarus ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Belarus",
         alpha2: "BY",
         alpha3: "BLR",
         numeric: 112,
-},
-
-    ],
+    }],
 };
-
 
 pub const CTKI: CountryCode3 = CountryCode3 {
     code: "CTKI",
@@ -161,20 +144,15 @@ pub const CTKI: CountryCode3 = CountryCode3 {
         alpha3: "CTE",
         numeric: 128,
     },
-    validity: &[1974,1984],
+    validity: &[1974, 1984],
     desc: "Merged into Kiribati ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Kiribati",
         alpha2: "KI",
         alpha3: "KIR",
         numeric: 296,
-},
-
-    ],
+    }],
 };
-
 
 pub const CSHH: CountryCode3 = CountryCode3 {
     code: "CSHH",
@@ -185,26 +163,23 @@ pub const CSHH: CountryCode3 = CountryCode3 {
         alpha3: "CSK",
         numeric: 200,
     },
-    validity: &[1974,1993],
+    validity: &[1974, 1993],
     desc: "Divided into: Czechia  Slovakia ",
     new_countries: &[
-
- CountryCode {
-        name: "Czechia",
-        alpha2: "CZ",
-        alpha3: "CZE",
-        numeric: 203,
-},
- CountryCode {
-        name: "Slovakia",
-        alpha2: "SK",
-        alpha3: "SVK",
-        numeric: 703,
-},
-
+        CountryCode {
+            name: "Czechia",
+            alpha2: "CZ",
+            alpha3: "CZE",
+            numeric: 203,
+        },
+        CountryCode {
+            name: "Slovakia",
+            alpha2: "SK",
+            alpha3: "SVK",
+            numeric: 703,
+        },
     ],
 };
-
 
 pub const DYBJ: CountryCode3 = CountryCode3 {
     code: "DYBJ",
@@ -215,20 +190,15 @@ pub const DYBJ: CountryCode3 = CountryCode3 {
         alpha3: "DHY",
         numeric: 204,
     },
-    validity: &[1974,1977],
+    validity: &[1974, 1977],
     desc: "Name changed to Benin ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Benin",
         alpha2: "BJ",
         alpha3: "BEN",
         numeric: 204,
-},
-
-    ],
+    }],
 };
-
 
 pub const NQAQ: CountryCode3 = CountryCode3 {
     code: "NQAQ",
@@ -239,20 +209,15 @@ pub const NQAQ: CountryCode3 = CountryCode3 {
         alpha3: "ATN",
         numeric: 216,
     },
-    validity: &[1974,1983],
+    validity: &[1974, 1983],
     desc: "Merged into Antarctica ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Antarctica",
         alpha2: "AQ",
         alpha3: "ATA",
         numeric: 10,
-},
-
-    ],
+    }],
 };
-
 
 pub const TPTL: CountryCode3 = CountryCode3 {
     code: "TPTL",
@@ -263,20 +228,15 @@ pub const TPTL: CountryCode3 = CountryCode3 {
         alpha3: "TMP",
         numeric: 626,
     },
-    validity: &[1974,2002],
+    validity: &[1974, 2002],
     desc: "Name changed to Timor-Leste ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Timor-Leste",
         alpha2: "TL",
         alpha3: "TLS",
         numeric: 626,
-},
-
-    ],
+    }],
 };
-
 
 pub const FXFR: CountryCode3 = CountryCode3 {
     code: "FXFR",
@@ -287,20 +247,15 @@ pub const FXFR: CountryCode3 = CountryCode3 {
         alpha3: "FXX",
         numeric: 249,
     },
-    validity: &[1993,1997],
+    validity: &[1993, 1997],
     desc: "Merged into France ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "France",
         alpha2: "FR",
         alpha3: "FRA",
         numeric: 250,
-},
-
-    ],
+    }],
 };
-
 
 pub const AIDJ: CountryCode3 = CountryCode3 {
     code: "AIDJ",
@@ -311,20 +266,15 @@ pub const AIDJ: CountryCode3 = CountryCode3 {
         alpha3: "AFI",
         numeric: 262,
     },
-    validity: &[1974,1977],
+    validity: &[1974, 1977],
     desc: "Name changed to Djibouti ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Djibouti",
         alpha2: "DJ",
         alpha3: "DJI",
         numeric: 262,
-},
-
-    ],
+    }],
 };
-
 
 pub const FQHH: CountryCode3 = CountryCode3 {
     code: "FQHH",
@@ -335,26 +285,23 @@ pub const FQHH: CountryCode3 = CountryCode3 {
         alpha3: "ATF",
         numeric: 0,
     },
-    validity: &[1974,1979],
+    validity: &[1974, 1979],
     desc: "Divided into: Part of Antarctica   French Southern Territories ",
     new_countries: &[
-
- CountryCode {
-        name: "Part of Antarctica",
-        alpha2: "AQ",
-        alpha3: "ATA",
-        numeric: 10,
-},
- CountryCode {
-        name: "French Southern Territories",
-        alpha2: "TF",
-        alpha3: "ATF",
-        numeric: 260,
-},
-
+        CountryCode {
+            name: "Part of Antarctica",
+            alpha2: "AQ",
+            alpha3: "ATA",
+            numeric: 10,
+        },
+        CountryCode {
+            name: "French Southern Territories",
+            alpha2: "TF",
+            alpha3: "ATF",
+            numeric: 260,
+        },
     ],
 };
-
 
 pub const DDDE: CountryCode3 = CountryCode3 {
     code: "DDDE",
@@ -365,20 +312,15 @@ pub const DDDE: CountryCode3 = CountryCode3 {
         alpha3: "DDR",
         numeric: 278,
     },
-    validity: &[1974,1990],
+    validity: &[1974, 1990],
     desc: "Merged into Germany ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Germany",
         alpha2: "DE",
         alpha3: "DEU",
         numeric: 276,
-},
-
-    ],
+    }],
 };
-
 
 pub const GEHH: CountryCode3 = CountryCode3 {
     code: "GEHH",
@@ -389,20 +331,15 @@ pub const GEHH: CountryCode3 = CountryCode3 {
         alpha3: "GEL",
         numeric: 296,
     },
-    validity: &[1974,1979],
+    validity: &[1974, 1979],
     desc: "Name changed to Kiribati ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Kiribati",
         alpha2: "KI",
         alpha3: "KIR",
         numeric: 296,
-},
-
-    ],
+    }],
 };
-
 
 pub const JTUM: CountryCode3 = CountryCode3 {
     code: "JTUM",
@@ -413,20 +350,15 @@ pub const JTUM: CountryCode3 = CountryCode3 {
         alpha3: "JTN",
         numeric: 396,
     },
-    validity: &[1974,1986],
+    validity: &[1974, 1986],
     desc: "Merged into United States Minor Outlying Islands ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "United States Minor Outlying Islands",
         alpha2: "UM",
         alpha3: "UMI",
         numeric: 581,
-},
-
-    ],
+    }],
 };
-
 
 pub const MIUM: CountryCode3 = CountryCode3 {
     code: "MIUM",
@@ -437,20 +369,15 @@ pub const MIUM: CountryCode3 = CountryCode3 {
         alpha3: "MID",
         numeric: 488,
     },
-    validity: &[1974,1986],
+    validity: &[1974, 1986],
     desc: "Merged into United States Minor Outlying Islands ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "United States Minor Outlying Islands",
         alpha2: "UM",
         alpha3: "UMI",
         numeric: 581,
-},
-
-    ],
+    }],
 };
-
 
 pub const ANHH: CountryCode3 = CountryCode3 {
     code: "ANHH",
@@ -461,32 +388,29 @@ pub const ANHH: CountryCode3 = CountryCode3 {
         alpha3: "ANT",
         numeric: 530,
     },
-    validity: &[1974,2010 ],
+    validity: &[1974, 2010],
     desc: "Divided into: Bonaire, Sint Eustatius and Saba   Curaçao  Sint Maarten  ",
     new_countries: &[
-
- CountryCode {
-        name: "Bonaire, Sint Eustatius and Saba",
-        alpha2: "BQ",
-        alpha3: "BES",
-        numeric: 535,
-},
- CountryCode {
-        name: "Curaçao",
-        alpha2: "CW",
-        alpha3: "CUW",
-        numeric: 531,
-},
- CountryCode {
-        name: "Sint Maarten (Dutch part)",
-        alpha2: "SX",
-        alpha3: "SXM",
-        numeric: 534,
-},
-
+        CountryCode {
+            name: "Bonaire, Sint Eustatius and Saba",
+            alpha2: "BQ",
+            alpha3: "BES",
+            numeric: 535,
+        },
+        CountryCode {
+            name: "Curaçao",
+            alpha2: "CW",
+            alpha3: "CUW",
+            numeric: 531,
+        },
+        CountryCode {
+            name: "Sint Maarten (Dutch part)",
+            alpha2: "SX",
+            alpha3: "SXM",
+            numeric: 534,
+        },
     ],
 };
-
 
 pub const NTHH: CountryCode3 = CountryCode3 {
     code: "NTHH",
@@ -497,26 +421,23 @@ pub const NTHH: CountryCode3 = CountryCode3 {
         alpha3: "NTZ",
         numeric: 536,
     },
-    validity: &[1974,1993],
+    validity: &[1974, 1993],
     desc: "Divided into: Part of Iraq  Part of Saudi Arabia ",
     new_countries: &[
-
- CountryCode {
-        name: "Part of Iraq",
-        alpha2: "IQ",
-        alpha3: "IRQ",
-        numeric: 368,
-},
- CountryCode {
-        name: "Part of Saudi Arabia",
-        alpha2: "SA",
-        alpha3: "SAU",
-        numeric: 682,
-},
-
+        CountryCode {
+            name: "Part of Iraq",
+            alpha2: "IQ",
+            alpha3: "IRQ",
+            numeric: 368,
+        },
+        CountryCode {
+            name: "Part of Saudi Arabia",
+            alpha2: "SA",
+            alpha3: "SAU",
+            numeric: 682,
+        },
     ],
 };
-
 
 pub const NHVU: CountryCode3 = CountryCode3 {
     code: "NHVU",
@@ -527,20 +448,15 @@ pub const NHVU: CountryCode3 = CountryCode3 {
         alpha3: "NHB",
         numeric: 548,
     },
-    validity: &[1974,1980],
+    validity: &[1974, 1980],
     desc: "Name changed to Vanuatu ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Vanuatu",
         alpha2: "VU",
         alpha3: "VUT",
         numeric: 548,
-},
-
-    ],
+    }],
 };
-
 
 pub const PCHH: CountryCode3 = CountryCode3 {
     code: "PCHH",
@@ -551,38 +467,35 @@ pub const PCHH: CountryCode3 = CountryCode3 {
         alpha3: "PCI",
         numeric: 582,
     },
-    validity: &[1974,1986],
+    validity: &[1974, 1986],
     desc: "Divided into: Marshall Islands  Micronesia   Northern Mariana Islands  Palau ",
     new_countries: &[
-
- CountryCode {
-        name: "Marshall Islands",
-        alpha2: "MH",
-        alpha3: "MHL",
-        numeric: 584,
-},
- CountryCode {
-        name: "Micronesia (Federated States of)",
-        alpha2: "FM",
-        alpha3: "FSM",
-        numeric: 583,
-},
- CountryCode {
-        name: "Northern Mariana Islands",
-        alpha2: "MP",
-        alpha3: "MNP",
-        numeric: 580,
-},
- CountryCode {
-        name: "Palau",
-        alpha2: "PW",
-        alpha3: "PLW",
-        numeric: 585,
-},
-
+        CountryCode {
+            name: "Marshall Islands",
+            alpha2: "MH",
+            alpha3: "MHL",
+            numeric: 584,
+        },
+        CountryCode {
+            name: "Micronesia (Federated States of)",
+            alpha2: "FM",
+            alpha3: "FSM",
+            numeric: 583,
+        },
+        CountryCode {
+            name: "Northern Mariana Islands",
+            alpha2: "MP",
+            alpha3: "MNP",
+            numeric: 580,
+        },
+        CountryCode {
+            name: "Palau",
+            alpha2: "PW",
+            alpha3: "PLW",
+            numeric: 585,
+        },
     ],
 };
-
 
 pub const PZPA: CountryCode3 = CountryCode3 {
     code: "PZPA",
@@ -593,20 +506,15 @@ pub const PZPA: CountryCode3 = CountryCode3 {
         alpha3: "PCZ",
         numeric: 0,
     },
-    validity: &[1974,1980],
+    validity: &[1974, 1980],
     desc: "Merged into Panama ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Panama",
         alpha2: "PA",
         alpha3: "PAN",
         numeric: 591,
-},
-
-    ],
+    }],
 };
-
 
 pub const CSXX: CountryCode3 = CountryCode3 {
     code: "CSXX",
@@ -617,26 +525,23 @@ pub const CSXX: CountryCode3 = CountryCode3 {
         alpha3: "SCG",
         numeric: 891,
     },
-    validity: &[2003,2006],
+    validity: &[2003, 2006],
     desc: "Divided into: Montenegro  Serbia ",
     new_countries: &[
-
- CountryCode {
-        name: "Montenegro",
-        alpha2: "ME",
-        alpha3: "MNE",
-        numeric: 499,
-},
- CountryCode {
-        name: "Serbia",
-        alpha2: "RS",
-        alpha3: "SRB",
-        numeric: 688,
-},
-
+        CountryCode {
+            name: "Montenegro",
+            alpha2: "ME",
+            alpha3: "MNE",
+            numeric: 499,
+        },
+        CountryCode {
+            name: "Serbia",
+            alpha2: "RS",
+            alpha3: "SRB",
+            numeric: 688,
+        },
     ],
 };
-
 
 pub const SKIN: CountryCode3 = CountryCode3 {
     code: "SKIN",
@@ -647,20 +552,15 @@ pub const SKIN: CountryCode3 = CountryCode3 {
         alpha3: "SKM",
         numeric: 0,
     },
-    validity: &[1974,1975],
+    validity: &[1974, 1975],
     desc: "Merged into India ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "India",
         alpha2: "IN",
         alpha3: "IND",
         numeric: 356,
-},
-
-    ],
+    }],
 };
-
 
 pub const RHZW: CountryCode3 = CountryCode3 {
     code: "RHZW",
@@ -671,20 +571,15 @@ pub const RHZW: CountryCode3 = CountryCode3 {
         alpha3: "RHO",
         numeric: 716,
     },
-    validity: &[1974,1980],
+    validity: &[1974, 1980],
     desc: "Name changed to Zimbabwe ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Zimbabwe",
         alpha2: "ZW",
         alpha3: "ZWE",
         numeric: 716,
-},
-
-    ],
+    }],
 };
-
 
 pub const PUUM: CountryCode3 = CountryCode3 {
     code: "PUUM",
@@ -695,20 +590,15 @@ pub const PUUM: CountryCode3 = CountryCode3 {
         alpha3: "PUS",
         numeric: 849,
     },
-    validity: &[1974,1986],
+    validity: &[1974, 1986],
     desc: "Merged into United States Minor Outlying Islands ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "United States Minor Outlying Islands",
         alpha2: "UM",
         alpha3: "UMI",
         numeric: 581,
-},
-
-    ],
+    }],
 };
-
 
 pub const HVBF: CountryCode3 = CountryCode3 {
     code: "HVBF",
@@ -719,20 +609,15 @@ pub const HVBF: CountryCode3 = CountryCode3 {
         alpha3: "HVO",
         numeric: 854,
     },
-    validity: &[1974,1984],
+    validity: &[1974, 1984],
     desc: "Name changed to Burkina Faso ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Burkina Faso",
         alpha2: "BF",
         alpha3: "BFA",
         numeric: 854,
-},
-
-    ],
+    }],
 };
-
 
 pub const SUHH: CountryCode3 = CountryCode3 {
     code: "SUHH",
@@ -829,7 +714,6 @@ pub const SUHH: CountryCode3 = CountryCode3 {
     ],
 };
 
-
 pub const VDVN: CountryCode3 = CountryCode3 {
     code: "VDVN",
     name: "Viet-Nam, Democratic Republic of",
@@ -839,20 +723,15 @@ pub const VDVN: CountryCode3 = CountryCode3 {
         alpha3: "VDR",
         numeric: 0,
     },
-    validity: &[1974,1977],
+    validity: &[1974, 1977],
     desc: "Merged into Viet Nam ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Viet Nam",
         alpha2: "VN",
         alpha3: "VNM",
         numeric: 704,
-},
-
-    ],
+    }],
 };
-
 
 pub const WKUM: CountryCode3 = CountryCode3 {
     code: "WKUM",
@@ -863,20 +742,15 @@ pub const WKUM: CountryCode3 = CountryCode3 {
         alpha3: "WAK",
         numeric: 872,
     },
-    validity: &[1974,1986],
+    validity: &[1974, 1986],
     desc: "Merged into United States Minor Outlying Islands ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "United States Minor Outlying Islands",
         alpha2: "UM",
         alpha3: "UMI",
         numeric: 581,
-},
-
-    ],
+    }],
 };
-
 
 pub const YDYE: CountryCode3 = CountryCode3 {
     code: "YDYE",
@@ -887,20 +761,15 @@ pub const YDYE: CountryCode3 = CountryCode3 {
         alpha3: "YMD",
         numeric: 720,
     },
-    validity: &[1974,1990],
+    validity: &[1974, 1990],
     desc: "Merged into Yemen ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Yemen",
         alpha2: "YE",
         alpha3: "YEM",
         numeric: 887,
-},
-
-    ],
+    }],
 };
-
 
 pub const YUCS: CountryCode3 = CountryCode3 {
     code: "YUCS",
@@ -911,20 +780,15 @@ pub const YUCS: CountryCode3 = CountryCode3 {
         alpha3: "YUG",
         numeric: 891,
     },
-    validity: &[1974,2003],
+    validity: &[1974, 2003],
     desc: "Name changed to Serbia and Montenegro ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Serbia and Montenegro",
         alpha2: "CS",
         alpha3: "SCG",
         numeric: 891,
-},
-
-    ],
+    }],
 };
-
 
 pub const ZRCD: CountryCode3 = CountryCode3 {
     code: "ZRCD",
@@ -935,20 +799,15 @@ pub const ZRCD: CountryCode3 = CountryCode3 {
         alpha3: "ZAR",
         numeric: 180,
     },
-    validity: &[1974,1997],
+    validity: &[1974, 1997],
     desc: "Name changed to Congo, Democratic Republic of the ",
-    new_countries: &[
-
- CountryCode {
+    new_countries: &[CountryCode {
         name: "Congo, Democratic Republic of the",
         alpha2: "CD",
         alpha3: "COD",
         numeric: 180,
-},
-
-    ],
+    }],
 };
-
 
 /// Returns the CountryCode3 with the given Alpha4 code, if exists.
 /// #Sample
@@ -961,8 +820,30 @@ pub fn from_code(alpha4: &str) -> Option<CountryCode3> {
     ALPHA4_MAP.get(alpha4).cloned()
 }
 
+#[cfg(feature = "serde")]
+impl Serialize for CountryCode3 {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(self.code)
+    }
+}
 
-///CountryCode map with  alpha4 Code key 
+#[cfg(feature = "serde")]
+impl<'de> Deserialize<'de> for CountryCode3 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        use serde::de::Error;
+        let s = String::deserialize(deserializer)?;
+        let s_upper = s.to_uppercase();
+        from_code(&s_upper)
+            .ok_or_else(|| D::Error::custom(format!("Invalid ISO 3166-3 code: {}", s)))
+    }
+}
+///CountryCode map with  alpha4 Code key
 pub const ALPHA4_MAP: Map<&str, CountryCode3> = phf_map! {
 
 "BQAQ" => BQAQ,
@@ -999,41 +880,8 @@ pub const ALPHA4_MAP: Map<&str, CountryCode3> = phf_map! {
 
 };
 
-
 ///ALL the Countrys struct
-pub const ALL: & [CountryCode3] = &[
-
-BQAQ,
-BUMM,
-BYAA,
-CTKI,
-CSHH,
-DYBJ,
-NQAQ,
-TPTL,
-FXFR,
-AIDJ,
-FQHH,
-DDDE,
-GEHH,
-JTUM,
-MIUM,
-ANHH,
-NTHH,
-NHVU,
-PCHH,
-PZPA,
-CSXX,
-SKIN,
-RHZW,
-PUUM,
-HVBF,
-SUHH,
-VDVN,
-WKUM,
-YDYE,
-YUCS,
-ZRCD,
-
+pub const ALL: &[CountryCode3] = &[
+    BQAQ, BUMM, BYAA, CTKI, CSHH, DYBJ, NQAQ, TPTL, FXFR, AIDJ, FQHH, DDDE, GEHH, JTUM, MIUM, ANHH,
+    NTHH, NHVU, PCHH, PZPA, CSXX, SKIN, RHZW, PUUM, HVBF, SUHH, VDVN, WKUM, YDYE, YUCS, ZRCD,
 ];
-
